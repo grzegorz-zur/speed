@@ -5,6 +5,7 @@
 
 		<meta charset="utf-8"/>
 		<meta name="viewport" content="width=device-width,initial-scale=1"/>
+		<meta name="theme-color" content="#ffffff"/>
 		<link rel="manifest" href="/manifest.webmanifest">
 		<title>Speed</title>
 
@@ -75,6 +76,14 @@
 		<div id="line"></div>
 
 		<script>
+
+			async function register() { 
+				if ('serviceWorker' in navigator) { 
+					await navigator.serviceWorker.register('serviceworker.js'); 
+				}
+			}
+
+			window.addEventListener('load', register); 
 
 			const meter = document.getElementById('meter');
 			const cells = document.getElementsByClassName('cell');
