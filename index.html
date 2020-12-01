@@ -2,57 +2,17 @@
 <html lang="en">
 
 	<head>
-
 		<meta charset="utf-8"/>
 		<meta name="viewport" content="width=device-width,initial-scale=1"/>
 		<meta name="theme-color" content="#ffffff"/>
-		<link rel="manifest" href="/manifest.webmanifest">
+		<link rel="manifest" href="manifest.webmanifest"/>
+		<link rel="stylesheet" type="text/css" href="style.css"/>
 		<title>Speed</title>
-
-		<style>
-
-			html, body {
-				height: 100%;
-				margin: 0;
-				background-color: black;
-				font-family: sans-serif;
-			}
-
-			#meter {
-				font-weight: bold;
-				display: flex;
-				height: 100%;
-				margin: 0;
-				align-items: center;
-				overflow: hidden;
-			}
-
-			#line {
-				background-color: white;
-				position: absolute;
-				height: 100%;
-				width: 4px;
-				top: 0;
-				left: calc(50% - 2px);
-				z-index: 1;
-			}
-
-			.cell {
-				text-align: center;
-			}
-
-			.cell_0, .cell_10, .cell_20, .cell_30       { color: hsl(100,100%,50%); }
-			.cell_40, .cell_50                          { color: hsl( 75,100%,50%); }
-			.cell_60, .cell_70, .cell_80, .cell_90      { color: hsl( 50,100%,50%); }
-			.cell_100, .cell_110, .cell_120, .cell_130  { color: hsl( 25,100%,50%); }
-			.cell_140, .cell_150, .cell_160, .cell_170  { color: hsl(  0,100%,50%); }
-
-			</style>
-
 	</head>
+
 	<body>
 
-		<div id="meter">
+		<div id="meter" class="meter">
 			<span class="cell cell_0">0</span>
 			<span class="cell cell_10">10</span>
 			<span class="cell cell_20">20</span>
@@ -73,49 +33,9 @@
 			<span class="cell cell_170">170</span>
 		</div>
 
-		<div id="line"></div>
+		<div class="line"></div>
 
-		<script>
-
-			async function register() { 
-				if ('serviceWorker' in navigator) { 
-					await navigator.serviceWorker.register('serviceworker.js'); 
-				}
-			}
-
-			window.addEventListener('load', register); 
-
-			const meter = document.getElementById('meter');
-			const cells = document.getElementsByClassName('cell');
-			const unit = 10 * 1000 / 3600; // 10 km/h to m/s
-
-			function slide(speed) {
-				const mw = meter.clientWidth;
-				const cw = mw / 2;
-				const fs = window.innerHeight / 2;
-				const pad = mw / 2 - cw / 2;
-				const pos = cw * speed / unit;
-				for (let cell of cells) {
-					cell.style.minWidth = `${cw}px`;
-				}
-				meter.style.fontSize = `${fs}px`;
-				meter.style.paddingLeft = `${pad}px`;
-				meter.style.paddingRight = `${pad}px`;
-				meter.scrollTo({ left:pos, behavior:'smooth' });
-			}
-
-			function watch(position) {
-				const speed = position.coords.speed;
-				if (speed != null) {
-					slide(speed);
-				}
-			}
-
-			slide(0);
-			const options = { enableHighAccuracy: true	}
-			navigator.geolocation.watchPosition(watch, null, options);
-
-		</script>
+		<script src="script.js"></script>
 
 	</body>
 </html>
