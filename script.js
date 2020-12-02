@@ -12,10 +12,13 @@ if (!debug) {
 
 const meter = document.getElementById('meter');
 const cells = document.getElementsByClassName('cell');
+const unit = 10;
+const width = 50;
 const duration = 1000;
+const mstokmh = 18 / 5;
 	
 function slide(speed) {
-	const offset = -speed / 10 * 50;
+	const offset = -speed / unit * width;
 	meter.animate(
 		{ left: `${offset}vw`}, 
 		{ 
@@ -27,14 +30,15 @@ function slide(speed) {
 }
 
 function watch(position) {
-	const speed = position.coords.speed;
-	if (speed != null) {
-		slide(speed * 1000 / 3600);
+	const ms = position.coords.speed;
+	if (ms != null) {
+		const kmh = ms * mstokmh;
+		slide(kmh);
 	}
 }
 
 function random() {
- const speed = Math.random() * 10 * (cells.length - 1);
+ const speed = Math.random() * unit * (cells.length - 1);
 	console.log(speed);
 	slide(speed);
 }
