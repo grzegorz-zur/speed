@@ -14,15 +14,20 @@ const meter = document.getElementById('meter');
 const cells = document.getElementsByClassName('cell');
 const unit = 10;
 const width = 50;
-const duration = 1000;
 const mstokmh = 18 / 5;
-	
+const grow = 1.5;
+let duration = 2000;
+let last = new Date();
+
 function slide(speed) {
 	const offset = -speed / unit * width;
+	const now = new Date();
+	duration = (duration + (now - last)) / 2;	
+	last = now;	
 	meter.animate(
 		{ left: `${offset}vw`}, 
 		{ 
-			duration: duration, 
+			duration: duration * grow, 
 			fill: 'forwards',
 			easing: 'ease'
 		}
