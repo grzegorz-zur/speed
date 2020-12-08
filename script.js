@@ -14,6 +14,8 @@ function random() {
 }
 
 function render() {
+	canvas.width		= document.body.clientWidth;
+	canvas.height = document.body.clientHeight;
 	const width  = canvas.width;
 	const height = canvas.height;
 	const size = width / slots;
