@@ -1,4 +1,40 @@
-const debug = new URLSearchParams(window.location.search).has('debug');
+"use strict";
+
+const simulate = new URLSearchParams(window.location.search).has('simulate');
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext("2d");
+const mstokmh = 18 / 5;
+const unit = 10;
+const slots = 2;
+
+let kmh = 0;
+
+function random() {
+ kmh = Math.random() * 130;
+}
+
+function render() {
+	const width  = canvas.width;
+	const height = canvas.height;
+	const size = width / slots;
+	const speed = kmh;
+	const position = speed / unit * size;
+	const positionMin = position - width / 2;
+	const positionMax = position + width / 2;
+	const speedMin = Math.floor(positionMin / size) * unit;
+	const speedMax = Math.ceil (positionMax / size) * unit;
+	const font = size / 3;
+	const baseline = height / 2;
+	ctx.fillStyle = 'black';
+	ctx.fillRect(0, 0, width, height);
+	ctx.fillStyle = 'white';	
+	ctx.font = `bold ${font}px sans-serif`;
+	ctx.textBaseline = 'middle';
+	for (let speed = speedMin; speed <= speedMax; speed += unit) {
+		const position = speed / unit * size - positionMin;
+		ctx.fillText(`${speed}`, position, baseline);
+	}
+}
 
 async function register() { 
 	if ('serviceWorker' in navigator) { 
@@ -6,51 +42,18 @@ async function register() {
 	}
 }
 
-if (!debug) {
-	window.addEventListener('load', register);
-}
-
-const meter = document.getElementById('meter');
-const cells = document.getElementsByClassName('cell');
-const unit = 10;
-const width = 50;
-const mstokmh = 18 / 5;
-const grow = 1.5;
-let duration = 2000;
-let last = new Date();
-
-function slide(speed) {
-	const offset = -speed / unit * width;
-	const now = new Date();
-	duration = (duration + (now - last)) / 2;	
-	last = now;	
-	meter.animate(
-		{ left: `${offset}vw`}, 
-		{ 
-			duration: duration * grow, 
-			fill: 'forwards',
-			easing: 'ease'
-		}
-	);
-}
-
 function watch(position) {
 	const ms = position.coords.speed;
 	if (ms != null) {
-		const kmh = ms * mstokmh;
-		slide(kmh);
+		kmh = ms * mstokmh;
 	}
 }
 
-function random() {
- const speed = Math.random() * unit * (cells.length - 1);
-	console.log(speed);
-	slide(speed);
+if (simulate) {
+	setInterval(random, 1000);
+} else {
+	window.addEventListener('load', register);
+	navigator.geolocation.watchPosition(watch, null, { enableHighAccuracy: true });
 }
 
-if (!debug) {
-	const options = { enableHighAccuracy: true	};
-	navigator.geolocation.watchPosition(watch, null, options);
-} else {
-	setInterval(random, 1000);
-}
+setInterval(render, 1000);
