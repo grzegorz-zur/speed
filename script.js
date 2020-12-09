@@ -3,23 +3,30 @@
 const simulate = new URLSearchParams(window.location.search).has('simulate');
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext("2d");
-const mstokmh = 18 / 5;
+const mstokmh = 3600 / 1000;
 const unit = 10;
 const slots = 2;
+const smoothing = 0.1;
+const randomInterval = 3 * 1000;
+const refreshInterval = 1000 / 16;
 
-let kmh = 0;
+let speed = 0;
+let prediction = 0;
 
 function random() {
- kmh = Math.random() * 130;
+ speed = Math.random() * 130;
 }
 
-function render() {
+function smooth(speed, prediction) {
+	return prediction + smoothing * (speed - prediction);	
+}
+
+function render(speed) {
 	canvas.width		= document.body.clientWidth;
 	canvas.height = document.body.clientHeight;
 	const width  = canvas.width;
 	const height = canvas.height;
 	const size = width / slots;
-	const speed = kmh;
 	const position = speed / unit * size;
 	const positionMin = position - width / 2;
 	const positionMax = position + width / 2;
@@ -33,9 +40,16 @@ function render() {
 	ctx.font = `bold ${font}px sans-serif`;
 	ctx.textBaseline = 'middle';
 	for (let speed = speedMin; speed <= speedMax; speed += unit) {
-		const position = speed / unit * size - positionMin;
-		ctx.fillText(`${speed}`, position, baseline);
+		if (speed >= 0) {
+			const position = speed / unit * size - positionMin;
+			ctx.fillText(`${speed}`, position, baseline);
+		}
 	}
+}
+
+function refresh() {
+	prediction = smooth(speed, prediction);
+	render(prediction);
 }
 
 async function register() { 
@@ -47,15 +61,15 @@ async function register() {
 function watch(position) {
 	const ms = position.coords.speed;
 	if (ms != null) {
-		kmh = ms * mstokmh;
+		speed = ms * mstokmh;
 	}
 }
 
 if (simulate) {
-	setInterval(random, 1000);
+	window.setInterval(random, randomInterval);
 } else {
 	window.addEventListener('load', register);
 	navigator.geolocation.watchPosition(watch, null, { enableHighAccuracy: true });
 }
 
-setInterval(render, 1000);
+window.setInterval(refresh, refreshInterval);
