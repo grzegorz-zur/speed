@@ -1,17 +1,23 @@
-const name = "speed";
-  
 self.addEventListener("install", (event) => {
 	event.waitUntil(
-		caches.open(name).then((cache) => {
-			return cache.addAll(["/"]);
+		caches.open("speed").then((cache) => {
+			return cache.addAll([
+				"/",
+				"/manifest.webmanifest",
+				"/style.css",
+				"/script.js",
+				"/serviceworker.js",
+				"/icon.svg",
+				"/icon.png"				
+			]);
 		})
 	);
 });
 
-self.addEventListener("fetch", (event) => {
+self.addEventListener('fetch', function(event) {
 	event.respondWith(
-		caches.match(event.request).then((response) => {
-			return response || fetch(event.request);
+		fetch(event.request).catch(function() {
+			return caches.match(event.request);
 		})
 	);
 });
