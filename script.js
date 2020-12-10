@@ -23,6 +23,14 @@ function smooth(speed, prediction) {
 	return prediction + smoothing * (speed - prediction);	
 }
 
+function hue(speed) {
+	if (speed < 40)  return 100;
+	if (speed < 60)  return 75;
+	if (speed < 100) return 50;
+	if (speed < 140) return 25;
+	return 0;
+}
+
 function render(speed) {
 	canvas.width		= document.body.clientWidth;
 	canvas.height = document.body.clientHeight;
@@ -46,6 +54,8 @@ function render(speed) {
 			const text = `${speed}`;
 			const textWidth = ctx.measureText(text).width;
 			const position = speed / unit * size - positionMin - textWidth / 2;
+			const color = hue(speed);
+			ctx.fillStyle = `hsl(${color}, 100%, 50%)`;
 			ctx.fillText(text, position, baseline);
 		}
 	}
@@ -54,6 +64,7 @@ function render(speed) {
 	const right = center + height / indicator;
 	const top = height / indicator;
 	const bottom = height - height / indicator;
+	ctx.fillStyle = 'hsl(0, 0%, 75%)';
 	ctx.fill(new Path2D(`M ${left} 0 L ${center} ${top} L ${right} 0 Z`));
 	ctx.fill(new Path2D(`M ${left} ${height} L ${center} ${bottom} L ${right} ${height} Z`));
 }
