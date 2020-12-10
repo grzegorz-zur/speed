@@ -6,9 +6,11 @@ const ctx = canvas.getContext("2d");
 const mstokmh = 3600 / 1000;
 const unit = 10;
 const slots = 2;
-const smoothing = 0.1;
+const smoothing = 0.05;
 const randomInterval = 3 * 1000;
 const refreshInterval = 1000 / 16;
+const ratio = 3;
+const indicator = 6;
 
 let speed = 0;
 let prediction = 0;
@@ -32,19 +34,28 @@ function render(speed) {
 	const positionMax = position + width / 2;
 	const speedMin = Math.floor(positionMin / size) * unit;
 	const speedMax = Math.ceil (positionMax / size) * unit;
-	const font = size / 3;
-	const baseline = height / 2;
+	const font = size / ratio;
+	const baseline = height / 2 + font / 2;
 	ctx.fillStyle = 'black';
 	ctx.fillRect(0, 0, width, height);
 	ctx.fillStyle = 'white';	
 	ctx.font = `bold ${font}px sans-serif`;
-	ctx.textBaseline = 'middle';
+	ctx.textBaseline = 'bottom';
 	for (let speed = speedMin; speed <= speedMax; speed += unit) {
 		if (speed >= 0) {
-			const position = speed / unit * size - positionMin;
-			ctx.fillText(`${speed}`, position, baseline);
+			const text = `${speed}`;
+			const textWidth = ctx.measureText(text).width;
+			const position = speed / unit * size - positionMin - textWidth / 2;
+			ctx.fillText(text, position, baseline);
 		}
 	}
+	const center = width / 2;
+	const left = center - height / indicator;
+	const right = center + height / indicator;
+	const top = height / indicator;
+	const bottom = height - height / indicator;
+	ctx.fill(new Path2D(`M ${left} 0 L ${center} ${top} L ${right} 0 Z`));
+	ctx.fill(new Path2D(`M ${left} ${height} L ${center} ${bottom} L ${right} ${height} Z`));
 }
 
 function refresh() {
