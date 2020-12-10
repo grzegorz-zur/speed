@@ -44,7 +44,7 @@ function render(speed) {
 	const speedMax = Math.ceil (positionMax / size) * unit;
 	const font = size / ratio;
 	const baseline = height / 2 + font / 2;
-	ctx.fillStyle = 'black';
+	ctx.fillStyle = 'hsl(0, 0%, 0%)';
 	ctx.fillRect(0, 0, width, height);
 	ctx.fillStyle = 'white';	
 	ctx.font = `bold ${font}px sans-serif`;
