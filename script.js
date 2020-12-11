@@ -1,7 +1,7 @@
 "use strict";
 
 const canvas = document.getElementById('canvas');
-const ctx = canvas.getContext("2d");
+const ctx = canvas.getContext('2d');
 const mstokmh = 3600 / 1000;
 const unit = 10;
 const slots = 2;
@@ -12,10 +12,6 @@ const indicator = 6;
 
 let speed = 0;
 let prediction = 0;
-
-function random() {
- speed = Math.random() * 130;
-}
 
 function smooth(speed, prediction) {
 	return prediction + smoothing * (speed - prediction);	
@@ -89,6 +85,10 @@ try {
 	navigator.wakeLock.request('screen');
 } catch (error) {
 	console.log(error);
+}
+
+function random() {
+ speed = Math.random() * 130;
 }
 
 const simulate = new URLSearchParams(window.location.search).has('simulate');
