@@ -3,7 +3,7 @@
 	"short_name": "Speed",
 	"display": "fullscreen",
 	"start_url": "https://speed.gzapps.com/",
-	"theme_color": "#ffffff",
+	"theme_color": "hsl(0, 0%, 100%)",
 	"prefer_related_applications": false,
 	"icons": [
 		{

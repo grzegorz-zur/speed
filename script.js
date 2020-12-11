@@ -1,14 +1,12 @@
 "use strict";
 
-const simulate = new URLSearchParams(window.location.search).has('simulate');
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext("2d");
 const mstokmh = 3600 / 1000;
 const unit = 10;
 const slots = 2;
-const smoothing = 0.05;
-const randomInterval = 3 * 1000;
-const refreshInterval = 1000 / 16;
+const smoothing = 0.2;
+const interval = 1000 / 16;
 const ratio = 3;
 const indicator = 6;
 
@@ -74,12 +72,6 @@ function refresh() {
 	render(prediction);
 }
 
-async function register() { 
-	if ('serviceWorker' in navigator) { 
-		await navigator.serviceWorker.register('serviceworker.js'); 
-	}
-}
-
 function watch(position) {
 	const ms = position.coords.speed;
 	if (ms != null) {
@@ -87,11 +79,19 @@ function watch(position) {
 	}
 }
 
-if (simulate) {
-	window.setInterval(random, randomInterval);
-} else {
-	window.addEventListener('load', register);
-	navigator.geolocation.watchPosition(watch, null, { enableHighAccuracy: true });
+navigator.geolocation.watchPosition(watch, null, { enableHighAccuracy: true });
+window.setInterval(refresh, interval);
+window.addEventListener('load', async () => {
+	await navigator.serviceWorker.register('serviceworker.js'); 
+}); 
+
+try {
+	navigator.wakeLock.request('screen');
+} catch (error) {
+	console.log(error);
 }
 
-window.setInterval(refresh, refreshInterval);
+const simulate = new URLSearchParams(window.location.search).has('simulate');
+if (simulate) {
+	window.setInterval(random, 3 * 1000);
+}
