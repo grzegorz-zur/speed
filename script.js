@@ -72,7 +72,6 @@ function renderVertical(speed, width, height) {
 	ctx.fillStyle = 'hsl(0, 0%, 100%)';	
 	ctx.font = `bold ${font}px sans-serif`;
 	ctx.textBaseline = 'middle';
-	console.log(speedMin, speedMax, positionMin, positionMax);
 	for (let speed = speedMin; speed <= speedMax; speed += unit) {
 		if (speed >= 0) {
 			const text = `${speed}`;
@@ -80,7 +79,6 @@ function renderVertical(speed, width, height) {
 			const position = positionMax - speed / unit * size;
 			const offset = width / 2 - textWidth / 2;
 			const color = hue(speed);
-			console.log(text, position);
 			ctx.fillStyle = `hsl(${color}, 100%, 50%)`;
 			ctx.fillText(text, offset, position);
 		}
