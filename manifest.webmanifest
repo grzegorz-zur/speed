@@ -1,10 +1,10 @@
 {
 	"name": "Speed",
 	"short_name": "Speed",
-	"display": "fullscreen",
+	"display": "standalone",
 	"start_url": "/",
-	"theme_color": "hsl(0, 0%, 100%)",
-	"background_color": "hsl(0, 0%, 100%)",
+	"theme_color": "hsl(0,0%,0%)",
+	"background_color": "hsl(0,0%,0%)",
 	"prefer_related_applications": false,
 	"icons": [
 		{

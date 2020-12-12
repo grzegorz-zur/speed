@@ -5,10 +5,10 @@ const ctx = canvas.getContext('2d');
 const mstokmh = 3600 / 1000;
 const unit = 10;
 const slots = 2;
-const smoothing = 0.2;
+const smoothing = 0.05;
 const interval = 1000 / 16;
-const ratio = 3;
-const indicator = 6;
+const ratio = 2.6;
+const indicator = 10;
 
 let speed = 0;
 let prediction = 0;
@@ -25,11 +25,7 @@ function hue(speed) {
 	return 0;
 }
 
-function render(speed) {
-	canvas.width		= document.body.clientWidth;
-	canvas.height = document.body.clientHeight;
-	const width  = canvas.width;
-	const height = canvas.height;
+function renderHorizontal(speed, width, height) {
 	const size = width / slots;
 	const position = speed / unit * size;
 	const positionMin = position - width / 2;
@@ -40,7 +36,7 @@ function render(speed) {
 	const baseline = height / 2 + font / 2;
 	ctx.fillStyle = 'hsl(0, 0%, 0%)';
 	ctx.fillRect(0, 0, width, height);
-	ctx.fillStyle = 'white';	
+	ctx.fillStyle = 'hsl(0, 0%, 100%)';	
 	ctx.font = `bold ${font}px sans-serif`;
 	ctx.textBaseline = 'bottom';
 	for (let speed = speedMin; speed <= speedMax; speed += unit) {
@@ -61,6 +57,54 @@ function render(speed) {
 	ctx.fillStyle = 'hsl(0, 0%, 75%)';
 	ctx.fill(new Path2D(`M ${left} 0 L ${center} ${top} L ${right} 0 Z`));
 	ctx.fill(new Path2D(`M ${left} ${height} L ${center} ${bottom} L ${right} ${height} Z`));
+}
+
+function renderVertical(speed, width, height) {
+	const size = height / slots;
+	const position = speed / unit * size;
+	const positionMin = position - height / 2;
+	const positionMax = position + height / 2;
+	const speedMin = Math.floor(positionMin / size) * unit;
+	const speedMax = Math.ceil (positionMax / size) * unit;
+	const font = size / ratio;
+	ctx.fillStyle = 'hsl(0, 0%, 0%)';
+	ctx.fillRect(0, 0, width, height);
+	ctx.fillStyle = 'hsl(0, 0%, 100%)';	
+	ctx.font = `bold ${font}px sans-serif`;
+	ctx.textBaseline = 'middle';
+	console.log(speedMin, speedMax, positionMin, positionMax);
+	for (let speed = speedMin; speed <= speedMax; speed += unit) {
+		if (speed >= 0) {
+			const text = `${speed}`;
+			const textWidth = ctx.measureText(text).width;
+			const position = positionMax - speed / unit * size;
+			const offset = width / 2 - textWidth / 2;
+			const color = hue(speed);
+			console.log(text, position);
+			ctx.fillStyle = `hsl(${color}, 100%, 50%)`;
+			ctx.fillText(text, offset, position);
+		}
+	}
+	const center = height / 2;
+	const left = width / indicator;
+	const right = width - width / indicator;
+	const top = center - height / indicator;
+	const bottom = center + height / indicator;
+	ctx.fillStyle = 'hsl(0, 0%, 75%)';
+	ctx.fill(new Path2D(`M 0 ${top} L ${left} ${center} L 0 ${bottom} Z`));
+	ctx.fill(new Path2D(`M ${width} ${top} L ${right} ${center} L ${width} ${bottom} Z`));
+}
+
+function render(speed) {
+	canvas.width  = document.body.clientWidth;
+	canvas.height = document.body.clientHeight;
+	const width  = canvas.width;
+	const height = canvas.height;
+	if (width >= height) {
+		renderHorizontal(speed, width, height);
+	} else {
+		renderVertical(speed, width, height);
+	}
 }
 
 function refresh() {
