@@ -21,14 +21,14 @@
      id="defs2" />
   <sodipodi:namedview
      id="base"
-     pagecolor="#ffffff"
+     pagecolor="#000000"
      bordercolor="#666666"
      borderopacity="1.0"
-     inkscape:pageopacity="0.0"
+     inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.46580399"
-     inkscape:cx="1202.4502"
-     inkscape:cy="-913.74237"
+     inkscape:zoom="0.73276408"
+     inkscape:cx="-118.82893"
+     inkscape:cy="320.63578"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      inkscape:document-rotation="0"
@@ -69,5 +69,20 @@
          x="9.5476818"
          y="97.773087"
          style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:82.5237px;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';stroke-width:0.42981;fill:#00d400;">30</tspan></text>
+    <path
+       id="path19"
+       style="fill:#b3b3b3;stroke-width:0.264583"
+       inkscape:transform-center-x="0.0070361925"
+       inkscape:transform-center-y="3.3818454"
+       transform="rotate(-4.9132438,136.86712,-116.21691)"
+       d="M 72.795933,-5.0791464 56.583417,10.52296 43.271486,-7.6171592 Z"
+       sodipodi:nodetypes="cccc" />
+    <path
+       id="path19-9"
+       style="fill:#b3b3b3;stroke-width:0.264583"
+       inkscape:transform-center-x="0.0070361925"
+       inkscape:transform-center-y="-3.3818454"
+       d="M 82.550004,135.46667 67.733334,118.53333 52.916666,135.46667 Z"
+       sodipodi:nodetypes="cccc" />
   </g>
 </svg>
