@@ -1,7 +1,7 @@
 "use strict";
 
-const canvas = document.getElementById('canvas');
-const ctx = canvas.getContext('2d');
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
 const mstokmh = 3600 / 1000;
 const unit = 10;
 const slots = 2;
@@ -14,7 +14,7 @@ let speed = 0;
 let prediction = 0;
 
 function smooth(speed, prediction) {
-	return prediction + smoothing * (speed - prediction);	
+	return prediction + smoothing * (speed - prediction);
 }
 
 function hue(speed) {
@@ -34,11 +34,11 @@ function renderHorizontal(speed, width, height) {
 	const speedMax = Math.ceil (positionMax / size) * unit;
 	const font = size / ratio;
 	const baseline = height / 2 + font / 2;
-	ctx.fillStyle = 'hsl(0, 0%, 0%)';
+	ctx.fillStyle = "hsl(0, 0%, 0%)";
 	ctx.fillRect(0, 0, width, height);
-	ctx.fillStyle = 'hsl(0, 0%, 100%)';	
+	ctx.fillStyle = "hsl(0, 0%, 100%)";
 	ctx.font = `bold ${font}px sans-serif`;
-	ctx.textBaseline = 'bottom';
+	ctx.textBaseline = "bottom";
 	for (let speed = speedMin; speed <= speedMax; speed += unit) {
 		if (speed >= 0) {
 			const text = `${speed}`;
@@ -54,7 +54,7 @@ function renderHorizontal(speed, width, height) {
 	const right = center + height / indicator;
 	const top = height / indicator;
 	const bottom = height - height / indicator;
-	ctx.fillStyle = 'hsl(0, 0%, 75%)';
+	ctx.fillStyle = "hsl(0, 0%, 75%)";
 	ctx.fill(new Path2D(`M ${left} 0 L ${center} ${top} L ${right} 0 Z`));
 	ctx.fill(new Path2D(`M ${left} ${height} L ${center} ${bottom} L ${right} ${height} Z`));
 }
@@ -67,11 +67,11 @@ function renderVertical(speed, width, height) {
 	const speedMin = Math.floor(positionMin / size) * unit;
 	const speedMax = Math.ceil (positionMax / size) * unit;
 	const font = size / ratio;
-	ctx.fillStyle = 'hsl(0, 0%, 0%)';
+	ctx.fillStyle = "hsl(0, 0%, 0%)";
 	ctx.fillRect(0, 0, width, height);
-	ctx.fillStyle = 'hsl(0, 0%, 100%)';	
+	ctx.fillStyle = "hsl(0, 0%, 100%)";
 	ctx.font = `bold ${font}px sans-serif`;
-	ctx.textBaseline = 'middle';
+	ctx.textBaseline = "middle";
 	for (let speed = speedMin; speed <= speedMax; speed += unit) {
 		if (speed >= 0) {
 			const text = `${speed}`;
@@ -88,7 +88,7 @@ function renderVertical(speed, width, height) {
 	const right = width - width / indicator;
 	const top = center - height / indicator;
 	const bottom = center + height / indicator;
-	ctx.fillStyle = 'hsl(0, 0%, 75%)';
+	ctx.fillStyle = "hsl(0, 0%, 75%)";
 	ctx.fill(new Path2D(`M 0 ${top} L ${left} ${center} L 0 ${bottom} Z`));
 	ctx.fill(new Path2D(`M ${width} ${top} L ${right} ${center} L ${width} ${bottom} Z`));
 }
@@ -119,12 +119,12 @@ function watch(position) {
 
 navigator.geolocation.watchPosition(watch, null, { enableHighAccuracy: true });
 window.setInterval(refresh, interval);
-window.addEventListener('load', async () => {
-	await navigator.serviceWorker.register('serviceworker.js'); 
+window.addEventListener("load", async () => {
+	await navigator.serviceWorker.register("serviceworker.js");
 }); 
 
 try {
-	navigator.wakeLock.request('screen');
+	navigator.wakeLock.request("screen");
 } catch (error) {
 	console.log(error);
 }
@@ -133,7 +133,7 @@ function random() {
  speed = Math.random() * 130;
 }
 
-const simulate = new URLSearchParams(window.location.search).has('simulate');
+const simulate = new URLSearchParams(window.location.search).has("simulate");
 if (simulate) {
 	window.setInterval(random, 3 * 1000);
 }
